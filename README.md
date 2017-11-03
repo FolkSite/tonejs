@@ -1,2 +1,2 @@
 # This is a training project
-sofa-fatuk.github.io
+[this link](sofa-fatuk.github.io)
