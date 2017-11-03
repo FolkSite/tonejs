@@ -1,1 +1,1 @@
-# This education project
+# This is a training project
