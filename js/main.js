@@ -1,6 +1,7 @@
 var piano = new Tone.Sampler({
 	'c1' : './sounds/piano/c1.mp3'
 }, function () {
+	piano.triggerAttackRelease('C4', '4n');
 	var arpeggio = new Tone.Sequence(function (time, note) {
 		piano.triggerAttackRelease(note, '4n');
 	}, ['F1', 'A1', 'C2', 'D2', 'F1', 'D2', 'C2', 'A1'], '4n');
@@ -43,9 +44,57 @@ var guitar = new Tone.Sampler({
 	'c4': './sounds/guitar/Guitar_C4.mp3'
 }, function() {
 	var solo = new Tone.Sequence(function (time, note) {
-		console.log(note);
 		guitar.triggerAttackRelease(note, '3n');
 	}, [['C5', 'E5'], ['D5', ['A4', 'G4']], 'F4', ['C4', 'E4']], '2n');
-	Tone.Transport.start();
-	solo.start();
+	// Tone.Transport.start();
+	// solo.start();
 }).toMaster();
+
+
+var soloNotes = ['C5', 'E5', 'D5', 'A4', 'G4', 'F4', 'C4', 'E4'];
+var factor = 30;
+
+$(document).on('scroll', debounce(soloPlayer, 40));
+
+function soloPlayer(e) {
+	var position = $(this).scrollTop();
+	var stepSize = $(window).height();
+	var steps = soloNotes.length;
+
+	for (var i = 0; i <= steps; i++) {
+		if (position > stepSize * (i - 1) && position < stepSize * i) {
+			guitar.triggerAttackRelease(soloNotes[i], '3n');
+		}
+	}
+	
+	// if (position >= 0 && position < step) {
+	// 	console.log(soloNotes[0]);
+	// 	guitar.triggerAttackRelease(soloNotes[0], '3n');
+	// }
+	// if (position >= step && position < step * 2) {
+	// 	console.log(soloNotes[1]);
+	// 	guitar.triggerAttackRelease(soloNotes[1], '3n');
+	// }
+	// if (position >= step * 2 && position > step * 3) {
+	// 	console.log(soloNotes[2]);
+	// 	guitar.triggerAttackRelease(soloNotes[2], '3n');
+	// }
+}
+
+
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this;
+        var args = arguments;
+      
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+}
