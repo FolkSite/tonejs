@@ -1,11 +1,11 @@
 var piano = new Tone.Sampler({
-	'c1' : './sounds/A1.mp3'
+	'c1' : './sounds/piano/c1.mp3'
 }, function () {
 	var arpeggio = new Tone.Sequence(function (time, note) {
-		piano.triggerAttackRelease(note, '1n');
+		piano.triggerAttackRelease(note, '4n');
 	}, ['F1', 'A1', 'C2', 'D2', 'F1', 'D2', 'C2', 'A1'], '4n');
 	var bass  = new Tone.Sequence(function (time, note) {
-		piano.triggerAttackRelease(note, '1n');
+		piano.triggerAttackRelease(note, '2n');
 	}, ['F0', '0', '0', 'E0', 'D0', '0', 'F1', 'E1'], '4n');
 	Tone.Transport.start();
 	arpeggio.start();
@@ -37,4 +37,15 @@ var drums = new Tone.Sampler({
 	Tone.Transport.start();
 	main.start();
 	second.start();
+}).toMaster();
+
+var guitar = new Tone.Sampler({
+	'c4': './sounds/guitar/Guitar_C4.mp3'
+}, function() {
+	var solo = new Tone.Sequence(function (time, note) {
+		console.log(note);
+		guitar.triggerAttackRelease(note, '3n');
+	}, [['C5', 'E5'], ['D5', ['A4', 'G4']], 'F4', ['C4', 'E4']], '2n');
+	Tone.Transport.start();
+	solo.start();
 }).toMaster();
